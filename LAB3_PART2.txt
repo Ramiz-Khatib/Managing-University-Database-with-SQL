@@ -1,0 +1,163 @@
+create table Student(sid char(10) primary key,
+sname varchar(20) not null, gpa float, major char(10), dob DATE);
+
+create table Course(cno char(10) primary key,
+cname varchar(20) not null, credits int, dept char(10));
+
+create table Reg(  sid references Student(sid) on delete cascade,
+  cno references Course(cno) on delete cascade,
+  grade char(2),
+  primary key (sid, cno));
+
+insert into Student values('111', 'Joe', 3.5 , 'MIS', '01-AUG-2000');
+
+insert into Student values('222', 'Jack', 3.4  , 'MIS', '12-JAN-1999');
+
+insert into Student values('333', 'Jill', 3.2 , 'CS', '15-MAY-1998');
+
+insert into Student values('444', 'Mary', 3.7 , 'CS', '17-DEC-2001');
+
+insert into Student values('555', 'Peter', 3.8 , 'CS', '19-MAR-1999');
+
+insert into Student values('666', 'Pat', 3.9,  'Math', '31-MAY-2000');
+
+insert into Student values('777', 'Tracy', 4.0,  'Math', '18-JUL-1997');
+
+insert into Course values('c101', 'intro', 3 , 'CS');
+
+insert into Course values('m415', 'database', 4 , 'Bus');
+
+insert into Course values('m215', 'programming', 4 , 'Bus');
+
+insert into Course values('a444', 'calculus', 3 , 'Math');
+
+insert into Reg values('111', 'c101', 'A');
+
+insert into Reg values('111', 'm215', 'B');
+
+insert into Reg values('111', 'm415', 'A');
+
+insert into Reg values('222', 'm215', 'A');
+
+insert into Reg values('222', 'm415', 'B');
+
+insert into Reg values('333', 'c101', 'A');
+
+insert into Reg values('444', 'm215', 'C');
+
+insert into Reg values('444', 'm415', 'B');
+
+insert into Reg values('555', 'c101', 'B');
+
+insert into Reg values('555', 'm215', 'A');
+
+insert into Reg values('555', 'm415', 'A');
+
+insert into Reg values('666', 'c101', 'A');
+
+Rem1.
+select * from Student  
+    where gpa > 3.8 
+    order by gpa desc
+
+/* I decided to choose this command, because im selecting the student database, locating the gpa, and commanding sql to choose gpa that's greater than 3.8.*/
+
+Rem2.
+select * from student 
+    where major = 'CS'
+    order by sname asc;
+
+/*I chose this command in SQL, because it allows me to specifically filter out students majoring in CS and it allows me to order it in ascending order by name.*/
+
+Rem3.
+select sname 
+    from student
+    where sname LIKE 'J%'
+    order by sname
+
+/*I chose this command in SQL, because it allows to filter students starting with 'J'.*/
+
+Rem4.
+select * from student 
+    where major = 'CS' or major = 'MIS'
+    order by sname asc;
+
+/*I chose this command in SQL, because it allows me to specifically filter out students majoring in CS OR MIS and it allows me to order it in ascending order by name.*/
+
+
+Rem5.
+Select * from student
+    where dob <'01-JUL-2000'
+    order by dob asc
+
+/*This function allows me to filter out any date of birth that is earlier than July 2000.*/
+
+
+Rem6.
+SELECT *
+FROM student
+WHERE gpa BETWEEN 3.2 AND 3.7;
+
+/*This command allows me to filter out GPA's between a GPA between a 3.2 and 3.7*/
+
+Rem7.
+Select credits from course where cname='database';
+
+/*This command allows us to count how many credit hours are in the database course.*/
+
+Rem8.
+/*select sname as name, gpa as cgpa, dob as birthday from student
+where gpa>3.5 and major='CS';*/
+
+/*This command allows us to find the names, GPA'S, snd birthdays of students majoring in in CS with a GPA of over 3.5*/
+
+Rem9.
+Select * from student where sname like 'P%' and dob>'31-DEC-1999';
+
+/*This command allows us to find students whose names start with a P and are born after the year 1999*/
+
+Rem10.
+select count(*) from REG where CNO='m415' and GRADE='B'
+
+
+
+/*This command allows us to count how many people got a B in M415*/
+
+Rem11.
+select max(GPA) from student
+where MAJOR= 'CS'
+
+/*This command allows us to see who has the highest GPA among CS majors*/
+
+Rem12.
+Select MAJOR from student 
+group by MAJOR
+having count (MAJOR) > 2
+
+/*This command allows us to list the majors with more than 2 students*/
+
+Rem13.
+select cno,grade,count(grade) as no_of_student from reg group by grade,cno 
+order by cno,grade asc;
+
+/*This command allows us to display the number of students who each got a grade, ordered by the course and the letter grade.*/
+
+REM14.
+SELECT s.*, trunc((SYSDATE-s.dob)/365) as AGE
+FROM Student s
+order by age asc;
+
+/*This command lists the current age in years for each student, from youngest to oldest.*/
+
+REM15.
+SELECT major, COUNT(*), min(gpa), max(gpa), round(avg(gpa),2), min(age), max(age),
+round (avg(age))
+FROM Studentwithage
+GROUP BY major;
+
+create view Studentwithage as
+SELECT s.*, trunc((SYSDATE-s.dob)/365) as AGE
+FROM Student s
+
+/*This command lists the number of students, minimum gpa, maximum gpa, average gpa, minimum age, maximum age and average age.*/ 
+
